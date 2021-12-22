@@ -30,15 +30,16 @@ module "acr" {
   tags                     = var.tags
 }
 
-# module "keyvault" {
-#   source                   = "./../../modules/cosmosdb"
-#   resource_group_name      = var.resource_group_name
-#   location                 = var.location
-#   resource_naming_template = local.resource_naming_template
-#   subnet_id                = var.subnet_id
-#   private_vnet_id          = var.private_vnet_id
-#   tags                     = var.tags
-# }
+module "keyvault" {
+  source                   = "./../../modules/cosmosdb"
+  resource_group_name      = data.azurerm_resource_group.rg.name
+  location                 = data.azurerm_resource_group.rg.location
+  resource_naming_template = local.resource_naming_template
+  subnet_id                = data.azurerm_subnet.hubprivate.id
+  private_vnet_id          = data.azurerm_virtual_network.hub.id
+  tags                     = var.tags
+}
+
 # module "managedidentities" {
 #   source = "./../../modules/managedidentities"
 # }
