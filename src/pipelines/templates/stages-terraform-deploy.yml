@@ -150,7 +150,7 @@ stages:
               backendServiceArm: ${{ parameters.ARM_SERVICE_CONNECTION }}
               ensureBackend: true
               backendAzureRmResourceGroupName: ${{ parameters.tf_state_rg }}
-              backendAzureRmResourceGroupLocation: ${{ parameters.tz_state_location }}
+              backendAzureRmResourceGroupLocation: ${{ parameters.tf_state_location }}
               backendAzureRmStorageAccountName: ${{ parameters.tf_state_sa_name }}
               backendAzureRmStorageAccountSku: ${{ parameters.tf_state_sku }}
               backendAzureRmContainerName: ${{ parameters.tf_state_container_name }}
