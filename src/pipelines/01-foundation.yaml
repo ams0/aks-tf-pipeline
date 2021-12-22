@@ -28,3 +28,4 @@ stages:
       tf_state_rg: ${{ variables.tf_state_rg }}
       tf_state_sa_name: ${{ variables.tf_state_sa_name }}
       tf_state_key: ${{ variables.stage }}
+      ARM_SERVICE_CONNECTION: $(ARM_SERVICE_CONNECTION)
