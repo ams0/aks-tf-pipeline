@@ -5,6 +5,7 @@ trigger:
     include:
       - src/terraform/stages/01-foundation
       - src/terraform/modules/
+      - src/pipelines/
 
 variables:
   - group: 'TF_LIBRARY'
