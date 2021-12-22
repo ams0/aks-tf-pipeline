@@ -17,6 +17,8 @@ variables:
     value: "tfstateblobs" # name of of the storage account to create/use for the terraform state file
   - name: TF_VAR_environment
     value: dev
+  - name: IS_NOT_PR
+    value: "${{ eq(lower(startsWith(variables['Build.SourceBranch'], 'refs/pull/')), 'false') }}"
   - name: EXTRA_OPTS
     value: "-var-file=../vars/common.tfvars -var-file=../vars/${{ variables.TF_VAR_environment }}.tfvars"
 
@@ -29,5 +31,6 @@ stages:
       tf_state_rg: ${{ variables.tf_state_rg }}
       tf_state_sa_name: ${{ variables.tf_state_sa_name }}
       tf_state_key: ${{ variables.stage }}
+      IS_NOT_PR: ${{ variables['IS_NOT_PR'] }}
       ARM_SERVICE_CONNECTION: $(ARM_SERVICE_CONNECTION)
       ARM_SERVICE_CONNECTION_NAME: $(ARM_SERVICE_CONNECTION_NAME)
