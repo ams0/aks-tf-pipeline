@@ -116,7 +116,7 @@ resource "null_resource" "enable-pod-identity" {
   }
 
   depends_on = [
-    null_resource.install_extension,
+#    null_resource.install_extension,
     azurerm_kubernetes_cluster.aks
   ]
 }
