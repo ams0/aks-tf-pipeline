@@ -1,6 +1,6 @@
 # Introduction 
 
-AKS Terraform with `azure-cli` `local-exec` via Azure DevOps pipelines.
+AKS Terraform with `azure-cli` `local-exec` via Azure DevOps pipelines. Work in progress
 
 # Getting Started
 TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
