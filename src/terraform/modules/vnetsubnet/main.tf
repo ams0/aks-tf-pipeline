@@ -15,10 +15,12 @@ resource "azurerm_subnet" "subnet-hub-fw" {
 }
 
 resource "azurerm_subnet" "subnet-hub-private" {
-  name                 = "subnet-hub-private"
-  resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.hub.name
-  address_prefixes     = var.hub-private-subnet-prefix
+  name                                          = "subnet-hub-private"
+  resource_group_name                           = var.resource_group_name
+  virtual_network_name                          = azurerm_virtual_network.hub.name
+  address_prefixes                              = var.hub-private-subnet-prefix
+  enforce_private_link_service_network_policies = true
+
 }
 
 resource "azurerm_virtual_network" "spoke" {
@@ -38,10 +40,12 @@ resource "azurerm_subnet" "subnet-spoke-cluster" {
 }
 
 resource "azurerm_subnet" "subnet-spoke-ingress" {
-  name                 = "subnet-spoke-ingress"
-  resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.spoke.name
-  address_prefixes     = var.subnet-spoke-ingress-prefix
+  name                                          = "subnet-spoke-ingress"
+  resource_group_name                           = var.resource_group_name
+  virtual_network_name                          = azurerm_virtual_network.spoke.name
+  address_prefixes                              = var.subnet-spoke-ingress-prefix
+  enforce_private_link_service_network_policies = true
+
 }
 
 #Peering Spoke --> Hub
