@@ -32,6 +32,9 @@ parameters:
   - name: EXTRA_OPTS
     type: string
     default: ""
+  - name: EXTRA_VARS
+    type: object
+    default: {}
 
 stages:
 
