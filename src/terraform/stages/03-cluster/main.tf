@@ -21,7 +21,7 @@ data "azurerm_user_assigned_identity" "aksnodepool" {
 }
 
 data "azurerm_virtual_network" "spoke" {
-  name                = "${format(local.resource_naming_template, 001, "spoke")}-vnet"
+  name                = "${format(local.resource_naming_template, 001, "spokes")}-vnet"
   resource_group_name = data.azurerm_resource_group.rg.name
 }
 
