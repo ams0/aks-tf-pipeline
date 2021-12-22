@@ -39,10 +39,9 @@ parameters:
     default: {}
 
 stages:
-
-# Azure DevOps Terraform Pipeline with Checkov & Approvals
-# https://www.mediaglasses.blog/2021/06/08/azure-devops-terraform-pipeline-with-checkov-approvals/
-# https://github.com/russmckendrick/DevOpsTerraformPipeline/blob/main/azure-pipelines.yml
+  # Azure DevOps Terraform Pipeline with Checkov & Approvals
+  # https://www.mediaglasses.blog/2021/06/08/azure-devops-terraform-pipeline-with-checkov-approvals/
+  # https://github.com/russmckendrick/DevOpsTerraformPipeline/blob/main/azure-pipelines.yml
 
   ######################################################################
   # Run Checkov, upload results and optionally halt if there any problems found
@@ -179,9 +178,9 @@ stages:
 
           - task: TerraformTaskV2@2
             inputs:
-                command: show
-                environmentServiceName: "${{ parameters.ARM_SERVICE_CONNECTION }}"
-                inputTargetPlanOrStateFilePath: "$(System.DefaultWorkingDirectory)/${{ parameters.WORKDIR }}/terraform.tfplan"
+              command: show
+              environmentServiceName: "${{ parameters.ARM_SERVICE_CONNECTION }}"
+              inputTargetPlanOrStateFilePath: "$(System.DefaultWorkingDirectory)/${{ parameters.WORKDIR }}/terraform.tfplan"
             displayName: "terraform show"
 
           - script: |
