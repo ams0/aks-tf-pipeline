@@ -4,8 +4,11 @@ trigger:
   paths:
     include:
       - src/terraform/stages/02-persistence
-      - src/terraform/modules/
-      - src/pipelines/
+      - src/terraform/modules/acr
+      - src/terraform/modules/insights
+      - src/terraform/modules/keyvault
+      - src/terraform/modules/managedidentities
+      - src/pipelines/02-persistence.yaml
 
 variables:
   - group: 'TF_LIBRARY'

@@ -4,8 +4,8 @@ trigger:
   paths:
     include:
       - src/terraform/stages/01-foundation
-      - src/terraform/modules/
-      - src/pipelines/
+      - src/terraform/modules/vnetsubnet
+      - src/pipelines/01-foundation.yaml
 
 variables:
   - group: 'TF_LIBRARY'

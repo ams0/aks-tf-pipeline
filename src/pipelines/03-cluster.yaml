@@ -4,8 +4,8 @@ trigger:
   paths:
     include:
       - src/terraform/stages/03-cluster
-      - src/terraform/modules/
-      - src/pipelines/
+      - src/terraform/modules/aksgitops
+      - src/pipelines/03-cluster.yaml
 
 variables:
   - group: 'TF_LIBRARY'
