@@ -114,3 +114,110 @@ stages:
               workingDirectory: ${{ parameters.WORKDIR }}
               environmentServiceName: ${{ parameters.ARM_SERVICE_CONNECTION }}
             displayName: "terraform validate"
+
+  ######################################################################
+  # Plan Terraform - uses the following ...
+  # https://marketplace.visualstudio.com/items?itemName=charleszipp.azure-pipelines-tasks-terraform
+  # Will set some variables to trigger a terrafrom apply automatically
+  # if there are just changes or ask for approval if there are any
+  # resouces which are being destroyed
+  ######################################################################
+  - stage: PLAN
+    displayName: "Plan Terraform"
+    dependsOn:
+      - CHECKOV
+      - VALIDATE
+    jobs:
+      - job: TF_Plan
+        displayName: "Terraform: install, init & plan"
+        steps:
+          - ${{ each step in parameters.CHECKOUT_STEP }}:
+              - ${{ step }}
+
+          - task: TerraformInstaller@0
+            inputs:
+              terraformVersion: ${{ parameters.tf_version }}
+            displayName: "Install terraform"
+
+          - task: TerraformTaskV2@2
+            inputs:
+              command: init
+              workingDirectory: ${{ parameters.WORKDIR }}
+              backendType: azurerm
+              backendServiceArm: ${{ parameters.ARM_SERVICE_CONNECTION }}
+              ensureBackend: true
+              backendAzureRmResourceGroupName: ${{ parameters.tf_state_rg }}
+              backendAzureRmResourceGroupLocation: ${{ parameters.tz_state_location }}
+              backendAzureRmStorageAccountName: ${{ parameters.tf_state_sa_name }}
+              backendAzureRmStorageAccountSku: ${{ parameters.tf_state_sku }}
+              backendAzureRmContainerName: ${{ parameters.tf_state_container_name }}
+              backendAzureRmKey: ${{ parameters.tf_state_key }}.terraform.tfstate
+              #commandOptions: -upgrade
+            displayName: "terraform init"
+
+          - task: TerraformTaskV2@2
+            inputs:
+              command: plan
+              workingDirectory: ${{ parameters.WORKDIR }}
+              environmentServiceName: ${{ parameters.ARM_SERVICE_CONNECTION }}
+              environmentServiceNameAzureRM: ${{ parameters.ARM_SERVICE_CONNECTION_NAME }}
+              commandOptions: -out=${{ parameters.PLAN_FILE }} ${{ parameters.EXTRA_OPTS }}
+            env:
+              ${{ each var in parameters.EXTRA_VARS }}:
+                ${{ format('TF_VAR_{0}', var.key) }}: ${{ var.value }}
+            displayName: "terraform plan"
+
+          # Publish the plan file as a pipe artifact
+          - publish: $(System.DefaultWorkingDirectory)/${{ parameters.WORKDIR }}/${{ parameters.PLAN_FILE }}
+            artifact: PlanFile
+            displayName: "Publish plan as artifact"
+
+          - task: TerraformTaskV2@2
+           inputs:
+             command: show
+             environmentServiceName: "${{ parameters.ARM_SERVICE_CONNECTION }}"
+             inputTargetPlanOrStateFilePath: "$(System.DefaultWorkingDirectory)/${{ parameters.WORKDIR }}/terraform.tfplan"
+           displayName: "terraform show"
+
+          - script: |
+              set -e
+
+              # Transform plan into JSON
+              terraform show -json "${PLAN_FILE}" > result.json
+
+              # Detect if there is any change
+              TERRAFORM_PLAN_HAS_CHANGES="$(
+                [ -n "$(jq '.resource_changes[] | .change.actions | length | select(. > 0)' result.json)" ] \
+                  && echo true \
+                  || echo false
+              )"
+
+              # Detect if there is any destroy (delete) change
+              TERRAFORM_PLAN_HAS_DESTROY_CHANGES="$(
+                [ -n "$(jq '.resource_changes[] | select(.change.actions | contains(["delete"]))' result.json)" ] \
+                  && echo true \
+                  || echo false
+              )"
+
+              # Decide based on the previous 2 detected vars from JSON plan
+              if [[ "${TERRAFORM_PLAN_HAS_CHANGES}" = true && "${TERRAFORM_PLAN_HAS_DESTROY_CHANGES}" = false ]]
+              then
+                echo "##vso[task.setvariable variable=HAS_CHANGES_ONLY;isOutput=true]true"
+                echo "##vso[task.logissue type=warning]Changes with no destroys detected, it is safe for the pipeline to proceed automatically"
+              elif [[ "${TERRAFORM_PLAN_HAS_CHANGES}" = true && "${TERRAFORM_PLAN_HAS_DESTROY_CHANGES}" = true ]]
+              then
+                echo "##vso[task.setvariable variable=HAS_DESTROY_CHANGES;isOutput=true]true"
+                echo "##vso[task.logissue type=warning]Changes with Destroy detected, pipeline will require a manual approval to proceed"
+              elif [ "${TERRAFORM_PLAN_HAS_CHANGES}" != true ]
+              then
+                echo "##vso[task.logissue type=warning]No changes detected, terraform apply will not run"
+              fi
+
+              # TODO: Use infracost to detect cost changes and use it to decide if auto-apply or don't
+              #       https://github.com/russmckendrick/DevOpsTerraformPipeline/blob/main/azure-pipelines.yml#L136
+              #       https://www.infracost.io/docs/integrations/infracost_api/
+            name: "setvar"
+            displayName: "Set Variables for next stage"
+            workingDirectory: ${{ parameters.WORKDIR }}
+            env:
+              PLAN_FILE: ${{ parameters.PLAN_FILE }}
