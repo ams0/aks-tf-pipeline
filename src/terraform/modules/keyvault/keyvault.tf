@@ -23,7 +23,7 @@ resource "azurerm_key_vault" "keyvault" {
       "Get", "List", "Set", "Delete", "Recover", "Purge"
     ]
   }
-  
+
   network_acls {
     default_action = "Allow"
     bypass         = "None"
