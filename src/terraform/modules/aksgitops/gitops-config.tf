@@ -29,7 +29,7 @@ resource "null_resource" "flux-system-exception" {
                  --tenant "$ARM_TENANT_ID" \
                  --output none
       fi
-      
+
       az extension add --name aks-preview
 
       az aks pod-identity exception add -g ${var.resource_group_name} \
@@ -70,7 +70,7 @@ resource "null_resource" "install_gitops_configuration" {
         --name infra-apps-flux-config --cluster-type managedClusters \
         --sync-interval 30s --ns cluster-config -s cluster \
         -u ${var.git_repo} --branch ${var.git_branch} \
-        --ssh-private-key $SSH_PRIV_KEY_BASE64 \
+        --ssh-private-key ${var.ssh_priv_key_base64} \
         --kustomization name=infra path=./src/gitops/infra prune=true sync_interval=30s \
         --kustomization name=apps path=./src/gitops/apps/ prune=true sync_interval=30s dependsOn=infra
     EOT
