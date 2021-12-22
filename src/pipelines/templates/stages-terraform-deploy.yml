@@ -31,6 +31,18 @@ parameters:
   - name: PLAN_FILE
     type: string
     default: "plan.tfplan"
+  - name: IS_NOT_PR
+    type: string
+    default: "false"
+  - name: NOTIFY_APPROVAL_EMAILS
+    type: string
+    default: "alessandro.vozza@microsoft.com"
+  - name: APPROVAL_JOB_TIMEOUT
+    type: number
+    default: 4320
+  - name: APPROVAL_STEP_TIMEOUT
+    type: number
+    default: 1440
   - name: EXTRA_OPTS
     type: string
     default: ""
