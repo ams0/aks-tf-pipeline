@@ -103,7 +103,7 @@ resource "null_resource" "enable-pod-identity" {
       env
       az login --service-principal -u 62e766f6-745b-482f-9c2c-12d723ef2200 -p $ARM_CLIENT_SECRET --tenant 372ee9e0-9ce0-4033-a64a-c07073a91ecd
       az account set --subscription ca8cc99b-384a-4c88-8314-e2c22bdc7d5b
-      az extension add --name aks-preview || true && az aks update -g ${data.azurerm_resource_group.aks.name} -n ${azurerm_kubernetes_cluster.aks.name} --enable-pod-identity
+      az extension add --name aks-preview || true && az aks update -g ${var.var.resource_group_name} -n ${azurerm_kubernetes_cluster.aks.name} --enable-pod-identity
       az extension add --name k8s-configuration || true
     EOT
 
