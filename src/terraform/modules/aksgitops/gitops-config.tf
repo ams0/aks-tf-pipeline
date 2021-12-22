@@ -19,7 +19,7 @@ resource "null_resource" "flux-system-exception" {
 
   provisioner "local-exec" {
     command = <<EOT
-      az aks pod-identity exception add -g ${data.azurerm_resource_group.rg.name} \
+      az aks pod-identity exception add -g ${var.resource_group_name} \
         --cluster-name ${azurerm_kubernetes_cluster.aks.name} \
         --namespace flux-system \
         --pod-labels app.kubernetes.io\/name=flux-extension
@@ -38,8 +38,7 @@ resource "null_resource" "install_gitops_configuration" {
   provisioner "local-exec" {
     command = <<EOT
       az config set extension.use_dynamic_install=yes_without_prompt
-      az login --service-principal -u $VAR_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $VAR_TENANT_ID
-      az k8s-configuration flux create -g ${data.azurerm_resource_group.rg.name} \
+      az k8s-configuration flux create -g ${var.resource_group_name} \
         --cluster-name ${azurerm_kubernetes_cluster.aks.name} \
         --name infra-apps-flux-config --cluster-type managedClusters \
         --sync-interval 30s --ns cluster-config -s cluster \
@@ -50,8 +49,6 @@ resource "null_resource" "install_gitops_configuration" {
     EOT
     environment = {
       SSH_PRIV_KEY_BASE64 = var.ssh_priv_key_base64
-      VAR_CLIENT_ID       = var.sp_clientid
-      VAR_TENANT_ID       = var.sp_tenantid
     }
   }
 
