@@ -31,6 +31,14 @@ module "acr" {
 }
 
 module "keyvault" {
+
+  #checkov:skip=CKV_AZURE_109:Ensure that key vault allows firewall rules settings
+  #checkov:skip=CKV_AZURE_110:Ensure that key vault enables purge protection
+  #checkov:skip=CKV_AZURE_114:Ensure that key vault secrets have "content_type" set
+  #checkov:skip=CKV_AZURE_41:Ensure that the expiration date is set on all secrets
+  #checkov:skip=CKV_AZURE_42:Ensure the key vault is recoverable
+
+
   source                   = "./../../modules/keyvault"
   resource_group_name      = data.azurerm_resource_group.rg.name
   location                 = data.azurerm_resource_group.rg.location
