@@ -173,11 +173,11 @@ stages:
             displayName: "Publish plan as artifact"
 
           - task: TerraformTaskV2@2
-           inputs:
-             command: show
-             environmentServiceName: "${{ parameters.ARM_SERVICE_CONNECTION }}"
-             inputTargetPlanOrStateFilePath: "$(System.DefaultWorkingDirectory)/${{ parameters.WORKDIR }}/terraform.tfplan"
-           displayName: "terraform show"
+            inputs:
+                command: show
+                environmentServiceName: "${{ parameters.ARM_SERVICE_CONNECTION }}"
+                inputTargetPlanOrStateFilePath: "$(System.DefaultWorkingDirectory)/${{ parameters.WORKDIR }}/terraform.tfplan"
+            displayName: "terraform show"
 
           - script: |
               set -e
