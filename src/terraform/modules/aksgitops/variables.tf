@@ -141,17 +141,6 @@ variable "enable_pod_identity" {
   default     = true
 }
 
-variable "sp_clientid" {
-  type = string
-}
-
-variable "sp_client_secret" {
-  type = string
-}
-
-variable "sp_tenantid" {
-  type = string
-}
 
 
 variable "enable_gitops" {
