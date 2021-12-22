@@ -303,6 +303,7 @@ stages:
               environmentServiceName: ${{ parameters.ARM_SERVICE_CONNECTION }}
               environmentServiceNameAzureRM: ${{ parameters.ARM_SERVICE_CONNECTION_NAME }}
               commandOptions: ${{ parameters.PLAN_FILE }}
+              runAzLogin: true
             env:
               ${{ each var in parameters.EXTRA_VARS }}:
                 ${{ format('TF_VAR_{0}', var.key) }}: ${{ var.value }}
@@ -385,6 +386,7 @@ stages:
               environmentServiceName: ${{ parameters.ARM_SERVICE_CONNECTION }}
               environmentServiceNameAzureRM: ${{ parameters.ARM_SERVICE_CONNECTION_NAME }}
               commandOptions: ${{ parameters.PLAN_FILE }}
+              runAzLogin: true
             env:
               ${{ each var in parameters.EXTRA_VARS }}:
                 ${{ format('TF_VAR_{0}', var.key) }}: ${{ var.value }}
