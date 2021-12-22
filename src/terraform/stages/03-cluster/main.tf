@@ -11,12 +11,12 @@ data "azurerm_resource_group" "rg" {
 }
 
 data "azurerm_user_assigned_identity" "aks" {
-  name                = "${format(var.resource_naming_template, 001, "aks")}-mi"
+  name                = "${format(local.resource_naming_template, 001, "aks")}-mi"
   resource_group_name = data.azurerm_resource_group.rg.name
 }
 
 data "azurerm_user_assigned_identity" "aksnodepool" {
-  name                = "${format(var.resource_naming_template, 001, "aksnodepool")}-mi"
+  name                = "${format(local.resource_naming_template, 001, "aksnodepool")}-mi"
   resource_group_name = data.azurerm_resource_group.rg.name
 }
 
@@ -38,10 +38,6 @@ module "aksgitops" {
 
   resource_naming_template = local.resource_naming_template
 
-  sp_client_secret = var.sp_client_secret
-  sp_tenantid      = var.sp_tenantid
-  sp_clientid      = var.sp_clientid
-
   #AAD
   tenant_id              = var.tenant_id
   admin_group_object_ids = var.admin_group_object_ids
@@ -57,13 +53,13 @@ module "aksgitops" {
   # kubelet_user_assigned_identity_id = data.azurerm_user_assigned_identity.aksnodepool.id
 
   #gitops
-  enable_gitops       = var.enable_gitops
+  enable_gitops       = true
   git_repo            = var.git_repo
   git_branch          = var.git_branch
   ssh_priv_key_base64 = var.ssh_priv_key_base64
 
   #network
-  vnet_subnet_id = data.azurerm_subnet.spoke.id
+  vnet_subnet_id = data.azurerm_subnet.spokesubnet.id
 
   tags           = var.tags
 }
