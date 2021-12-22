@@ -7,6 +7,6 @@ terraform {
     }
   }
   backend "azurerm" {
-    use_microsoft_graph  = true
+    use_microsoft_graph = true
   }
 }
