@@ -19,7 +19,7 @@ parameters:
     type: string
   - name: tf_state_container_name
     type: string
-    default: "tfstate"
+    default: "tfstates"
   - name: tf_state_key
     type: string
   - name: ARM_SERVICE_CONNECTION

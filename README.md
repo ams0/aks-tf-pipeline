@@ -14,6 +14,10 @@ az role assignment create --role "Storage Blob Data Contributor" --assignee 852b
 ```
 
 Make sure you don't have a `ARM_ACCESS_KEY` environment variable set, but you have `ARM_CLIENT_ID`,`ARM_CLIENT_SECRET`,`ARM_SUBSCRIPTION_ID` and `ARM_TENANT_ID` set to a Service Principal with Contributor access to the Storage account you created.
+
+Create a Service Connection
+Create a variable group
+
 # Getting Started
 TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
 1.	Installation process
