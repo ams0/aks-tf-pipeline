@@ -100,6 +100,11 @@ variable "user_assigned_identity_id" {
   type = string
 }
 
+variable "sku_tier" {
+  type    = string
+  default = "Free"
+}
+
 # variable "kubelet_user_assigned_identity_id" {
 #   type = string
 # }

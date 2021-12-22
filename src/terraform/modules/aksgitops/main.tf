@@ -13,7 +13,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   resource_group_name             = var.resource_group_name
   dns_prefix                      = format(var.resource_naming_template, 001, "aks")
   kubernetes_version              = var.kubernetes_version
-  sku_tier                        = "Free"
+  sku_tier                        = var.sku_tier
   api_server_authorized_ip_ranges = []
 
   automatic_channel_upgrade = var.upgrade_channel
