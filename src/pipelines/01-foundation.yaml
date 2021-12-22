@@ -1,0 +1,30 @@
+trigger:
+  branches:
+    include: [main]
+  paths:
+    include:
+      - src/terraform/stages/01-foundation
+      - src/terraform/modules/
+
+variables:
+  - group: 'TF_LIBRARY'
+  - name: stage
+    value: 01-foundation
+  - name: tf_state_rg
+    value: "tfstates" # name of the resource group to create/use for the terraform state file
+  - name: tf_state_sa_name
+    value: "tfstateblobs" # name of of the storage account to create/use for the terraform state file
+  - name: TF_VAR_environment
+    value: dev
+  - name: EXTRA_OPTS
+    value: "-var-file=../common.tfvars -var-file=${{ variables.stage }}/${{ variables.TF_VAR_environment }}.tfvars -var ssh_priv_key_base64=$SSH_PRIV_KEY_BASE64 -var sp_client_secret=$ARM_SERVICE_PRINCIPLE_CLIENT_SECRET -var sp_tenantid=$ARM_SERVICE_PRINCIPLE_TENANT_ID -var sp_clientid=$ARM_SERVICE_PRINCIPLE_CLIENT_ID"
+
+
+stages:
+  - template: templates/stages-terraform-deploy.yml
+    parameters:
+      EXTRA_OPTS: ${{ variables.EXTRA_OPTS }}
+      WORKDIR: src/terraform/stages/${{ variables.stage }}
+      tf_state_rg: ${{ variables.tf_state_rg }}
+      tf_state_sa_name: ${{ variables.tf_state_sa_name }}
+      tf_state_key: ${{ variables.stage }}

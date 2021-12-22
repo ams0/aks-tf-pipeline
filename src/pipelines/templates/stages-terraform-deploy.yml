@@ -1,0 +1,118 @@
+parameters:
+  - name: tf_version
+    type: string
+    default: "1.1.2"
+  - name: CHECKOUT_STEP
+    type: stepList
+    default:
+      - checkout: self
+        submodules: true
+  - name: tf_state_rg
+    type: string
+  - name: tf_state_location
+    type: string
+    default: "westeurope"
+  - name: tf_state_sku
+    type: string
+    default: "Standard_LRS"
+  - name: tf_state_sa_name
+    type: string
+  - name: tf_state_container_name
+    type: string
+    default: "tfstate"
+  - name: tf_state_key
+    type: string
+  - name: ARM_SERVICE_CONNECTION
+    type: string
+  - name: ARM_SERVICE_CONNECTION_NAME
+    type: string
+  - name: WORKDIR
+    type: string
+  - name: PLAN_FILE
+    type: string
+    default: "plan.tfplan"
+  - name: EXTRA_OPTS
+    type: string
+    default: ""
+
+stages:
+
+# Azure DevOps Terraform Pipeline with Checkov & Approvals
+# https://www.mediaglasses.blog/2021/06/08/azure-devops-terraform-pipeline-with-checkov-approvals/
+# https://github.com/russmckendrick/DevOpsTerraformPipeline/blob/main/azure-pipelines.yml
+
+  ######################################################################
+  # Run Checkov, upload results and optionally halt if there any problems found
+  ######################################################################
+  - stage: CHECKOV
+    displayName: "Checkov - Scan Terraform files"
+    dependsOn: []
+    jobs:
+      - job: runCheckov
+        displayName: "Checkov > Pull, run and publish results of Checkov scan"
+        steps:
+          - ${{ each step in parameters.CHECKOUT_STEP }}:
+              - ${{ step }}
+          - script: docker pull bridgecrew/checkov
+            displayName: "Pull bridgecrew/checkov"
+          - script: |
+              set -e
+              docker run \
+                --volume "${PWD}:/tf" \
+                bridgecrew/checkov \
+                  --directory "/tf/${WORKDIR}" \
+                  --output junitxml \
+                  --soft-fail \
+                > "CheckovReport.xml"
+            displayName: "Run checkov"
+            env:
+              WORKDIR: ${{ parameters.WORKDIR }}
+          - task: PublishTestResults@2
+            inputs:
+              testRunTitle: "Checkov Results"
+              failTaskOnFailedTests: true
+              testResultsFormat: "JUnit"
+              testResultsFiles: "CheckovReport.xml"
+              searchFolder: $(System.DefaultWorkingDirectory)
+            displayName: "Publish Checkov scan results"
+
+  ######################################################################
+  # Validate Terraform - uses the following ...
+  # https://marketplace.visualstudio.com/items?itemName=ms-devlabs.custom-terraform-tasks
+  ######################################################################
+  - stage: VALIDATE
+    displayName: "Validate Terraform"
+    dependsOn: []
+    jobs:
+      - job: TF_Validate
+        displayName: "Terraform: install, init & validate"
+        continueOnError: false
+        steps:
+          - ${{ each step in parameters.CHECKOUT_STEP }}:
+              - ${{ step }}
+          - task: TerraformInstaller@0
+            inputs:
+              terraformVersion: ${{ parameters.tf_version }}
+            displayName: "Install terraform"
+
+          - task: TerraformTaskV2@2
+            inputs:
+              command: init
+              workingDirectory: ${{ parameters.WORKDIR }}
+              backendType: azurerm
+              backendServiceArm: ${{ parameters.ARM_SERVICE_CONNECTION }}
+              ensureBackend: true
+              backendAzureRmResourceGroupName: ${{ parameters.tf_state_rg }}
+              backendAzureRmResourceGroupLocation: ${{ parameters.tz_state_location }}
+              backendAzureRmStorageAccountName: ${{ parameters.tf_state_sa_name }}
+              backendAzureRmStorageAccountSku: ${{ parameters.tf_state_sku }}
+              backendAzureRmContainerName: ${{ parameters.tf_state_container_name }}
+              backendAzureRmKey: ${{ parameters.tf_state_key }}.terraform.tfstate
+            displayName: "terraform init"
+
+          - task: TerraformTaskV2@2
+            inputs:
+              command: validate
+              workingDirectory: ${{ parameters.WORKDIR }}
+              environmentServiceName: ${{ parameters.ARM_SERVICE_CONNECTION }}
+            displayName: "terraform validate"

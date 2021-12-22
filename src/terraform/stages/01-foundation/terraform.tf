@@ -1,5 +1,5 @@
 terraform {
-  required_version = "~> 1.0.0"
+  required_version = ">= 1.0.0"
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -7,6 +7,7 @@ terraform {
     }
   }
   backend "azurerm" {
+    use_microsoft_graph  = true
     resource_group_name  = "tfstates"
     storage_account_name = "tfstateblobs"
     container_name       = "tfstates"
