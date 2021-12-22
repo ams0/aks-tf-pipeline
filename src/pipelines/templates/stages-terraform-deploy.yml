@@ -24,6 +24,8 @@ parameters:
     type: string
   - name: ARM_SERVICE_CONNECTION
     type: string
+  - name: ARM_SERVICE_CONNECTION_NAME
+    type: string
   - name: WORKDIR
     type: string
   - name: PLAN_FILE
