@@ -12,18 +12,18 @@ data "azurerm_resource_group" "rg" {
 
 data "azurerm_virtual_network" "hub" {
     name = "${format(var.resource_naming_template, 001, "hub")}-vnet"
-    resource_group_name = data.resource_group_name.rg.name
+    resource_group_name = data.azurerm_resource_group.rg.name
 }
 
 data "azurerm_subnet" "hubprivate" {
   name                 = "subnet-hub-private"
   virtual_network_name = data.azurerm_virtual_network.hub.name
-    resource_group_name = data.resource_group_name.rg.name
+    resource_group_name = data.azurerm_resource_group.rg.name
 }
 module "acr" {
   source                   = "./../../modules/acr"
-  resource_group_name      = data.resource_group_name.rg.name
-  location                 = data.resource_group_name.location
+  resource_group_name      = data.azurerm_resource_group.rg.name
+  location                 = data.azurerm_resource_group.location
   resource_naming_template = local.resource_naming_template
   subnet_id                = data.azurerm_subnet.hubprivate
   private_vnet_id          = data.azurerm_virtual_network.hub.id
