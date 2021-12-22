@@ -34,4 +34,5 @@ stages:
       IS_NOT_PR: ${{ variables['IS_NOT_PR'] }}
       ARM_SERVICE_CONNECTION: $(ARM_SERVICE_CONNECTION)
       ARM_SERVICE_CONNECTION_NAME: $(ARM_SERVICE_CONNECTION_NAME)
+    env:
       TF_VAR_ssh_priv_key_base64: $(TF_VAR_ssh_priv_key_base64)
