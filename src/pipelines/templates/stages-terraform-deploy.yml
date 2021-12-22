@@ -187,6 +187,7 @@ stages:
               set -e
 
               # Transform plan into JSON
+              terraform show -json "${PLAN_FILE}"
               terraform show -json "${PLAN_FILE}" > result.json
 
               # Detect if there is any change
