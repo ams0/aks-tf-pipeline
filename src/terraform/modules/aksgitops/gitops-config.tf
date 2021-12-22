@@ -1,16 +1,17 @@
 data "azurerm_client_config" "current" {}
 
-resource "null_resource" "install_extension" {
-  provisioner "local-exec" {
-    command = <<EOT
-      az extension add --name k8s-extension
-      az extension add --name k8s-configuration
-      az extension add --name aks-preview
-      az extension list -o table
-    EOT
+# Because every job runs on a fresh agent, this is useless
+# resource "null_resource" "install_extension" {
+#   provisioner "local-exec" {
+#     command = <<EOT
+#       az extension add --name k8s-extension
+#       az extension add --name k8s-configuration
+#       az extension add --name aks-preview
+#       az extension list -o table
+#     EOT
 
-  }
-}
+#   }
+# }
 
 
 resource "null_resource" "flux-system-exception" {
@@ -19,6 +20,18 @@ resource "null_resource" "flux-system-exception" {
 
   provisioner "local-exec" {
     command = <<EOT
+      set -ex
+      if [ -n "$ARM_CLIENT_ID" ]; then
+        # We are running on an Azure DevOps agent, need to log in
+        az login --service-principal \
+                 --username "$ARM_CLIENT_ID" \
+                 --password "$ARM_CLIENT_SECRET" \
+                 --tenant "$ARM_TENANT_ID" \
+                 --output none
+      fi
+      
+      az extension add --name aks-preview
+
       az aks pod-identity exception add -g ${var.resource_group_name} \
         --cluster-name ${azurerm_kubernetes_cluster.aks.name} \
         --namespace flux-system \
@@ -38,6 +51,20 @@ resource "null_resource" "install_gitops_configuration" {
   provisioner "local-exec" {
     command = <<EOT
       az config set extension.use_dynamic_install=yes_without_prompt
+
+      az extension add --name k8s-extension
+      az extension add --name k8s-configuration
+      az extension add --name aks-preview
+
+      set -ex
+      if [ -n "$ARM_CLIENT_ID" ]; then
+        # We are running on an Azure DevOps agent, need to log in
+        az login --service-principal \
+                 --username "$ARM_CLIENT_ID" \
+                 --password "$ARM_CLIENT_SECRET" \
+                 --tenant "$ARM_TENANT_ID" \
+                 --output none
+      fi
       az k8s-configuration flux create -g ${var.resource_group_name} \
         --cluster-name ${azurerm_kubernetes_cluster.aks.name} \
         --name infra-apps-flux-config --cluster-type managedClusters \

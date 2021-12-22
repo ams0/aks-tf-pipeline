@@ -109,7 +109,7 @@ resource "null_resource" "enable-pod-identity" {
                  --tenant "$ARM_TENANT_ID" \
                  --output none
       fi
-
+      az extension add --name aks-preview
       az aks update -g ${var.resource_group_name} -n ${azurerm_kubernetes_cluster.aks.name} --enable-pod-identity
     EOT
 
