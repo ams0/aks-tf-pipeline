@@ -2,10 +2,6 @@ provider "azurerm" {
   features {}
 }
 
-data "azurerm_resource_group" "aks" {
-  name = var.resource_group_name
-}
-
 resource "azurerm_kubernetes_cluster" "aks" {
 
   #checkov:skip=CKV_AZURE_4:Ensure AKS logging to Azure Monitoring is Configured
@@ -13,8 +9,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
   #checkov:skip=CKV_AZURE_115:Ensure that AKS enables private clusters
 
   name                            = format(var.resource_naming_template, 001, "aks")
-  location                        = data.azurerm_resource_group.aks.location
-  resource_group_name             = data.azurerm_resource_group.aks.name
+  location                        = var.location
+  resource_group_name             = var.resource_group_name
   dns_prefix                      = format(var.resource_naming_template, 001, "aks")
   kubernetes_version              = var.kubernetes_version
   sku_tier                        = "Free"
