@@ -50,8 +50,8 @@ resource "null_resource" "install_gitops_configuration" {
     EOT
     environment = {
       SSH_PRIV_KEY_BASE64 = var.ssh_priv_key_base64
-      VAR_CLIENT_ID = var.sp_clientid
-      VAR_TENANT_ID = var.sp_tenantid
+      VAR_CLIENT_ID       = var.sp_clientid
+      VAR_TENANT_ID       = var.sp_tenantid
     }
   }
 

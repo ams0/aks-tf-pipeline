@@ -7,10 +7,11 @@ resource "azurerm_virtual_network" "hub" {
 }
 
 resource "azurerm_subnet" "subnet-hub-fw" {
-  name                 = "subnet-hub-fw"
-  resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.hub.name
-  address_prefixes     = var.hub-fw-subnet-prefix
+  name                                          = "subnet-hub-fw"
+  resource_group_name                           = var.resource_group_name
+  virtual_network_name                          = azurerm_virtual_network.hub.name
+  address_prefixes                              = var.hub-fw-subnet-prefix
+  enforce_private_link_service_network_policies = true
 }
 
 resource "azurerm_subnet" "subnet-hub-private" {
@@ -29,10 +30,11 @@ resource "azurerm_virtual_network" "spoke" {
 }
 
 resource "azurerm_subnet" "subnet-spoke-cluster" {
-  name                 = "subnet-spoke-cluster"
-  resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.spoke.name
-  address_prefixes     = var.subnet-spoke-cluster-prefix
+  name                                          = "subnet-spoke-cluster"
+  resource_group_name                           = var.resource_group_name
+  virtual_network_name                          = azurerm_virtual_network.spoke.name
+  address_prefixes                              = var.subnet-spoke-cluster-prefix
+  enforce_private_link_service_network_policies = true
 }
 
 resource "azurerm_subnet" "subnet-spoke-ingress" {
