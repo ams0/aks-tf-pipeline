@@ -2,6 +2,17 @@
 
 AKS Terraform with `azure-cli` `local-exec` via Azure DevOps pipelines. Work in progress
 
+# Steps
+
+First, non automated step to create the storage account and blob to store Terraform state (chicken/egg):
+
+```
+az group create -n tfstates
+az storage account create -n tfstateblobs -g tfstates --sku STANDARD_LRS
+az storage containertainer create --account-name tfstateblobs --name tfstates
+az role assignment create --role "Storage Blob Data Contributor" --assignee 852b9f60-7bd6-4cb9-b1b8-f2e34137b7bd --scope /subscriptions/12c7e9d6-967e-40c8-8b3e-4659a4ada3ef/resourcegroups/tfstates/providers/Microsoft.Storage/storageAccounts/tfstateblobs
+```
+
 # Getting Started
 TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
 1.	Installation process

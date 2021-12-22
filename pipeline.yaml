@@ -3,5 +3,8 @@ trigger:
     include: [main]
   paths:
     include:
-      - src/terraform/stages/
+      - src/terraform/stages/01-foundation
       - src/terraform/modules/
+
+variables:
+  - group: 'TF_LIBRARY'
