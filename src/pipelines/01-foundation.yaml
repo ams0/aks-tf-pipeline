@@ -18,7 +18,7 @@ variables:
   - name: TF_VAR_environment
     value: dev
   - name: EXTRA_OPTS
-    value: "-var-file=../vars/common.tfvars -var-file=../vars/${{ variables.TF_VAR_environment }}.tfvars -var ssh_priv_key_base64=$SSH_PRIV_KEY_BASE64 -var sp_client_secret=$ARM_SERVICE_PRINCIPLE_CLIENT_SECRET -var sp_tenantid=$ARM_SERVICE_PRINCIPLE_TENANT_ID -var sp_clientid=$ARM_SERVICE_PRINCIPLE_CLIENT_ID"
+    value: "-var-file=../vars/common.tfvars -var-file=../vars/${{ variables.TF_VAR_environment }}.tfvars"
 
 
 stages:
