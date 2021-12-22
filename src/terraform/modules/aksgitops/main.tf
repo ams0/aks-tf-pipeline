@@ -100,6 +100,16 @@ resource "null_resource" "enable-pod-identity" {
 
   provisioner "local-exec" {
     command = <<EOT
+      set -ex
+      if [ -n "$ARM_CLIENT_ID" ]; then
+        # We are running on an Azure DevOps agent, need to log in
+        az login --service-principal \
+                 --username "$ARM_CLIENT_ID" \
+                 --password "$ARM_CLIENT_SECRET" \
+                 --tenant "$ARM_TENANT_ID" \
+                 --output none
+      fi
+
       az aks update -g ${var.resource_group_name} -n ${azurerm_kubernetes_cluster.aks.name} --enable-pod-identity
     EOT
 
