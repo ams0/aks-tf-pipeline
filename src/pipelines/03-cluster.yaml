@@ -20,7 +20,7 @@ variables:
   - name: IS_NOT_PR
     value: "${{ eq(lower(startsWith(variables['Build.SourceBranch'], 'refs/pull/')), 'false') }}"
   - name: EXTRA_OPTS
-    value: "-var-file=../vars/common.tfvars -var-file=../vars/${{ variables.environment }}.tfvars -var ssh_priv_key_base64=${{ variables.TF_LIBRARY.SSH_PRIV_KEY_BASE64 }}"
+    value: "-var-file=../vars/common.tfvars -var-file=../vars/${{ variables.environment }}.tfvars -var ssh_priv_key_base64=$(SSH_PRIV_KEY_BASE64)"
 
 
 stages:
