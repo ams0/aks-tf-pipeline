@@ -28,7 +28,11 @@ resource "azurerm_role_assignment" "networkcontrib" {
   role_definition_name = "Network Contributor"
   principal_id         = azurerm_user_assigned_identity.aks.principal_id
 }
-
+resource "azurerm_role_assignment" "mi-operator" {
+  scope                = azurerm_user_assigned_identity.aksnodepool.id
+  role_definition_name = "Managed Identity Operator"
+  principal_id         = azurerm_user_assigned_identity.aks.principal_id
+}
 resource "azurerm_role_assignment" "acrpull" {
   scope                = data.azurerm_container_registry.acr.id
   role_definition_name = "AcrPull"
