@@ -71,4 +71,8 @@ module "insights" {
   resource_naming_template = local.resource_naming_template
   tags                     = var.tags
   keyvault_id              = module.keyvault.keyvault_id
+
+    depends_on = [
+    module.keyvault
+  ]
 }
