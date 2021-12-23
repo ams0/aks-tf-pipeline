@@ -13,3 +13,8 @@ variable "tags" {
 variable "resource_naming_template" {
   type = string
 }
+
+
+variable "acr_name" {
+  type = string
+}

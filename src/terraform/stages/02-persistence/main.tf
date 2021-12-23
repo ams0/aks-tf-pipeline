@@ -53,7 +53,9 @@ module "managedidentities" {
   resource_group_name      = data.azurerm_resource_group.rg.name
   location                 = data.azurerm_resource_group.rg.location
   resource_naming_template = local.resource_naming_template
-  tags                     = var.tags
+
+  acr_name = module.acr.acr_name
+  tags     = var.tags
 
 }
 
