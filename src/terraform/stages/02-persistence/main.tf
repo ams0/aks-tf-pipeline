@@ -10,20 +10,15 @@ data "azurerm_resource_group" "rg" {
   name = "${format(local.resource_naming_template, 001, "tf")}-rg"
 }
 
-data "azurerm_virtual_network" "hub" {
-  name                = "${format(local.resource_naming_template, 001, "hub")}-vnet"
-  resource_group_name = data.azurerm_resource_group.rg.name
-}
-
-data "azurerm_subnet" "hubprivate" {
-  name                 = "subnet-hub-private"
-  virtual_network_name = data.azurerm_virtual_network.hub.name
-  resource_group_name  = data.azurerm_resource_group.rg.name
-}
-
 data "azurerm_virtual_network" "spoke" {
   name                = "${format(local.resource_naming_template, 001, "spokes")}-vnet"
   resource_group_name = data.azurerm_resource_group.rg.name
+}
+
+data "azurerm_subnet" "cluster" {
+  name                 = "subnet-spoke-cluster"
+  virtual_network_name = data.azurerm_virtual_network.spoke.name
+  resource_group_name  = data.azurerm_resource_group.rg.name
 }
 
 module "acr" {
@@ -31,7 +26,7 @@ module "acr" {
   resource_group_name      = data.azurerm_resource_group.rg.name
   location                 = data.azurerm_resource_group.rg.location
   resource_naming_template = local.resource_naming_template
-  subnet_id                = data.azurerm_subnet.hubprivate.id
+  subnet_id                = data.azurerm_subnet.cluster.id
   private_vnet_id          = data.azurerm_virtual_network.spoke.id
   tags                     = var.tags
 }
@@ -49,8 +44,8 @@ module "keyvault" {
   resource_group_name      = data.azurerm_resource_group.rg.name
   location                 = data.azurerm_resource_group.rg.location
   resource_naming_template = local.resource_naming_template
-  subnet_id                = data.azurerm_subnet.hubprivate.id
-  private_vnet_id          = data.azurerm_virtual_network.hub.id
+  subnet_id                = data.azurerm_subnet.cluster.id
+  private_vnet_id          = data.azurerm_virtual_network.spoke.id
   tags                     = var.tags
 }
 

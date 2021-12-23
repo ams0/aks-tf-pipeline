@@ -18,6 +18,11 @@ Make sure you don't have a `ARM_ACCESS_KEY` environment variable set, but you ha
 Create a Service Connection
 Create a variable group
 
+
+# Cluster validation
+
+- Pull from ACR
+- Create a LB service with private IP
 # Getting Started
 TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
 1.	Installation process
