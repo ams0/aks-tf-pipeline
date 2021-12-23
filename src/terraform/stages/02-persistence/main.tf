@@ -57,6 +57,10 @@ module "managedidentities" {
   acr_name = module.acr.acr_name
   tags     = var.tags
 
+  depends_on = [
+    module.acr
+  ]
+
 }
 
 
