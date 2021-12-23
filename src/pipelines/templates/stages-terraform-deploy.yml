@@ -177,6 +177,18 @@ stages:
               workingDirectory: ${{ parameters.WORKDIR }}
               environmentServiceName: ${{ parameters.ARM_SERVICE_CONNECTION }}
               environmentServiceNameAzureRM: ${{ parameters.ARM_SERVICE_CONNECTION_NAME }}
+              commandOptions: ${{ parameters.EXTRA_OPTS }}
+            env:
+              ${{ each var in parameters.EXTRA_VARS }}:
+                ${{ format('TF_VAR_{0}', var.key) }}: ${{ var.value }}
+            displayName: "terraform plan (visible)"
+
+          - task: TerraformTaskV2@2
+            inputs:
+              command: plan
+              workingDirectory: ${{ parameters.WORKDIR }}
+              environmentServiceName: ${{ parameters.ARM_SERVICE_CONNECTION }}
+              environmentServiceNameAzureRM: ${{ parameters.ARM_SERVICE_CONNECTION_NAME }}
               commandOptions: -out=${{ parameters.PLAN_FILE }} ${{ parameters.EXTRA_OPTS }}
             env:
               ${{ each var in parameters.EXTRA_VARS }}:
