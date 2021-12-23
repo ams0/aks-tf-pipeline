@@ -1,3 +1,6 @@
+data "azurerm_resource_group" "rg" {
+  name = var.resource_group_name
+}
 
 resource "azurerm_user_assigned_identity" "aks" {
   name                = "${format(var.resource_naming_template, 001, "aks")}-mi"
@@ -13,4 +16,10 @@ resource "azurerm_user_assigned_identity" "aksnodepool" {
   resource_group_name = var.resource_group_name
   tags                = var.tags
 
+}
+
+resource "azurerm_role_assignment" "networkcontrib" {
+  scope                = data.azurerm_resource_group.rg.id
+  role_definition_name = "Network Contributor"
+  principal_id         = azurerm_user_assigned_identity.aks.principal_id
 }
