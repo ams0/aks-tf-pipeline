@@ -15,12 +15,12 @@ variables:
     value: "tfstates" # name of the resource group to create/use for the terraform state file
   - name: tf_state_sa_name
     value: "tfstateblobs" # name of of the storage account to create/use for the terraform state file
-  - name: TF_VAR_environment
+  - name: environment
     value: dev
   - name: IS_NOT_PR
     value: "${{ eq(lower(startsWith(variables['Build.SourceBranch'], 'refs/pull/')), 'false') }}"
   - name: EXTRA_OPTS
-    value: "-var-file=../vars/common.tfvars -var-file=../vars/${{ variables.TF_VAR_environment }}.tfvars -var ssh_priv_key_base64=$TF_VAR_ssh_priv_key_base64"
+    value: "-var-file=../vars/common.tfvars -var-file=../vars/${{ variables.environment }}.tfvars -var ssh_priv_key_base64=${{ variables.TF_LIBRARY.SSH_PRIV_KEY_BASE64 }}"
 
 
 stages:
