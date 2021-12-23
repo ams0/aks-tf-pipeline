@@ -60,7 +60,11 @@ resource "azurerm_kubernetes_cluster" "aks" {
       user_assigned_identity_id = var.user_assigned_identity_id
     }
   }
-
+  kubelet_identity {
+    client_id                 = var.nodepool_mi_client_id
+    object_id                 = var.nodepool_mi_object_id
+    user_assigned_identity_id = var.nodepool_mi_kubelet_user_assigned_identity_id
+  }
 
   network_profile {
     network_plugin    = var.network_plugin
@@ -116,7 +120,7 @@ resource "null_resource" "enable-pod-identity" {
   }
 
   depends_on = [
-#    null_resource.install_extension,
+    #    null_resource.install_extension,
     azurerm_kubernetes_cluster.aks
   ]
 }

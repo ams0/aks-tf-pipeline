@@ -105,18 +105,18 @@ variable "sku_tier" {
   default = "Free"
 }
 
-# variable "kubelet_user_assigned_identity_id" {
-#   type = string
-# }
+variable "nodepool_mi_kubelet_user_assigned_identity_id" {
+  type = string
+}
 
-# variable "client_id" {
-#   type = string
-# }
+variable "nodepool_mi_client_id" {
+  type = string
+}
 
 
-# variable "object_id" {
-#   type = string
-# }
+variable "nodepool_mi_object_id" {
+  type = string
+}
 
 #Nodepools
 variable "nodepools" {

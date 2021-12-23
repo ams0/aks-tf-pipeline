@@ -48,9 +48,9 @@ module "aksgitops" {
   user_assigned_identity_id = data.azurerm_user_assigned_identity.aks.id
 
   ##nodepool identity
-  # client_id                         = data.azurerm_user_assigned_identity.aksnodepool.client_id
-  # object_id                         = data.azurerm_user_assigned_identity.aksnodepool.principal_id
-  # kubelet_user_assigned_identity_id = data.azurerm_user_assigned_identity.aksnodepool.id
+  nodepool_mi_client_id                         = data.azurerm_user_assigned_identity.aksnodepool.client_id
+  nodepool_mi_object_id                         = data.azurerm_user_assigned_identity.aksnodepool.principal_id
+  nodepool_mi_kubelet_user_assigned_identity_id = data.azurerm_user_assigned_identity.aksnodepool.id
 
   #gitops
   enable_gitops       = true
