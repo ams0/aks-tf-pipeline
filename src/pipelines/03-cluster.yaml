@@ -6,6 +6,7 @@ trigger:
       - src/terraform/stages/03-cluster
       - src/terraform/modules/aksgitops
       - src/pipelines/03-cluster.yaml
+      - src/terraform/stages/vars
 
 variables:
   - group: 'TF_LIBRARY'

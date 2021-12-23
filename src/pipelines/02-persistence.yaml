@@ -9,6 +9,8 @@ trigger:
       - src/terraform/modules/keyvault
       - src/terraform/modules/managedidentities
       - src/pipelines/02-persistence.yaml
+      - src/terraform/stages/vars
+
 
 variables:
   - group: 'TF_LIBRARY'
