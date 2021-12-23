@@ -72,7 +72,7 @@ module "insights" {
   tags                     = var.tags
   keyvault_id              = module.keyvault.keyvault_id
 
-    depends_on = [
+  depends_on = [
     module.keyvault
   ]
 }

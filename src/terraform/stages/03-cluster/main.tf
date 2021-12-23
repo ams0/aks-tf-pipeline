@@ -32,9 +32,9 @@ data "azurerm_subnet" "spokesubnet" {
 }
 
 module "aksgitops" {
-  source                   = "./../../modules/aksgitops"
-  resource_group_name      = data.azurerm_resource_group.rg.name
-  location                 = data.azurerm_resource_group.rg.location
+  source              = "./../../modules/aksgitops"
+  resource_group_name = data.azurerm_resource_group.rg.name
+  location            = data.azurerm_resource_group.rg.location
 
   resource_naming_template = local.resource_naming_template
 
@@ -42,6 +42,7 @@ module "aksgitops" {
   tenant_id              = var.tenant_id
   admin_group_object_ids = var.admin_group_object_ids
 
+  nodepools = var.nodepools
   #MIs
   ##cluster identity
   cluster_identity_type     = "UserAssigned"
@@ -61,6 +62,5 @@ module "aksgitops" {
   #network
   vnet_subnet_id = data.azurerm_subnet.spokesubnet.id
 
-  tags           = var.tags
+  tags = var.tags
 }
-
