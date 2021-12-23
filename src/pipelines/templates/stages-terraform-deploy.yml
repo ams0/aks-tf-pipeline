@@ -131,6 +131,18 @@ stages:
               environmentServiceName: ${{ parameters.ARM_SERVICE_CONNECTION }}
             displayName: "terraform validate"
 
+          - task: TerraformTaskV2@2
+            inputs:
+              command: plan
+              workingDirectory: ${{ parameters.WORKDIR }}
+              environmentServiceName: ${{ parameters.ARM_SERVICE_CONNECTION }}
+              environmentServiceNameAzureRM: ${{ parameters.ARM_SERVICE_CONNECTION_NAME }}
+              commandOptions: ${{ parameters.EXTRA_OPTS }}
+            env:
+              ${{ each var in parameters.EXTRA_VARS }}:
+                ${{ format('TF_VAR_{0}', var.key) }}: ${{ var.value }}
+            displayName: "terraform plan (visible)"
+
   ######################################################################
   # Plan Terraform - uses the following ...
   # https://marketplace.visualstudio.com/items?itemName=charleszipp.azure-pipelines-tasks-terraform
@@ -170,18 +182,6 @@ stages:
               backendAzureRmKey: ${{ parameters.tf_state_key }}.terraform.tfstate
               #commandOptions: -upgrade
             displayName: "terraform init"
-
-          - task: TerraformTaskV2@2
-            inputs:
-              command: plan
-              workingDirectory: ${{ parameters.WORKDIR }}
-              environmentServiceName: ${{ parameters.ARM_SERVICE_CONNECTION }}
-              environmentServiceNameAzureRM: ${{ parameters.ARM_SERVICE_CONNECTION_NAME }}
-              commandOptions: ${{ parameters.EXTRA_OPTS }}
-            env:
-              ${{ each var in parameters.EXTRA_VARS }}:
-                ${{ format('TF_VAR_{0}', var.key) }}: ${{ var.value }}
-            displayName: "terraform plan (visible)"
 
           - task: TerraformTaskV2@2
             inputs:
