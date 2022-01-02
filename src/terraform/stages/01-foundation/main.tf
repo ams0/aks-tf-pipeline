@@ -7,7 +7,7 @@ locals {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "${format(local.resource_naming_template, 001, "tf")}-rg"
+  name     = "${format(local.resource_naming_template, var.progressive, "tf")}-rg"
   location = var.location
 }
 
