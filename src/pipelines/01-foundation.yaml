@@ -19,10 +19,12 @@ variables:
     value: "tfstateblobs" # name of of the storage account to create/use for the terraform state file
   - name: TF_VAR_environment
     value: dev
+  - name: TF_VAR_progressive #override at pipeline run UI
+    value: 001
   - name: IS_NOT_PR
     value: "${{ eq(lower(startsWith(variables['Build.SourceBranch'], 'refs/pull/')), 'false') }}"
   - name: EXTRA_OPTS
-    value: "-var-file=../vars/common.tfvars -var-file=../vars/${{ variables.TF_VAR_environment }}.tfvars"
+    value: "-var-file=../vars/common.tfvars -var progressive=${{ variables.TF_VAR_progressive }} -var-file=../vars/${{ variables.TF_VAR_environment }}.tfvars"
 
 
 stages:
