@@ -12,7 +12,7 @@ parameters:
   - name: progressive #override at pipeline run UI
     displayName: Progressive Number
     default: 001
-    type: Number
+    type: number
 
 variables:
   - group: 'TF_LIBRARY'
