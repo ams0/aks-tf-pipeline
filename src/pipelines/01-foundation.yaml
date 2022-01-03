@@ -19,6 +19,11 @@ parameters:
     displayName: Environment
     default: dev
     type: string
+    values:
+    - dev
+    - tst
+    - prd
+
 
 variables:
   - group: 'TF_LIBRARY'
