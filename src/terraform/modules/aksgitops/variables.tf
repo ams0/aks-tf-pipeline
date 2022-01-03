@@ -52,7 +52,6 @@ variable "addon_oms_agent_enabled" {
 }
 
 variable "log_analytics_workspace_id" {
-  type    = bool
   default = false
 }
 variable "addon_azure_keyvault_secrets_provider_enabled" {
