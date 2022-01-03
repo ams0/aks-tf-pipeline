@@ -32,7 +32,7 @@ data "azurerm_subnet" "spokesubnet" {
 }
 
 data "azurerm_log_analytics_workspace" "appi" {
-  name                = format(var.resource_naming_template, var.progressive, "appi")
+  name                = format(local.resource_naming_template, var.progressive, "appi")
   resource_group_name = data.azurerm_resource_group.rg.name
 }
 module "aksgitops" {
