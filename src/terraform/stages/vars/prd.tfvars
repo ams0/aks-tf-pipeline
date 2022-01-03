@@ -1,4 +1,4 @@
-environment = "prd  "
+environment = "prd"
 
 nodepools = [
   {
