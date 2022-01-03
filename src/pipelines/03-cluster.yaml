@@ -8,9 +8,13 @@ trigger:
       - src/pipelines/03-cluster.yaml
       - src/terraform/stages/vars
 
-name: $(Build.DefinitionName)-$(SourceBranchName)-${{ parameters.environment }}-${{ parameters.progressive }}
+name: $(Build.DefinitionName)-$(SourceBranchName)-${{ parameters.environment }}-${{ parameters.progressive }}-${{ parameters.comment }}
 
 parameters:
+  - name: comment #Just a comment
+    displayName: Comment
+    default: "manualrun"
+    type: string
   - name: progressive #override at pipeline run UI
     displayName: Progressive Number
     default: 001
