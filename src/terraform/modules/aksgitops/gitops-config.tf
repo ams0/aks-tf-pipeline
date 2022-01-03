@@ -35,7 +35,7 @@ resource "null_resource" "flux-system-exception" {
       az aks pod-identity exception add -g ${var.resource_group_name} \
         --cluster-name ${azurerm_kubernetes_cluster.aks.name} \
         --namespace flux-system \
-        --pod-labels app.kubernetes.io\/name=flux-extension
+        --pod-labels app.kubernetes.io\/name=flux-extension --only-show-errors
     EOT
   }
   depends_on = [
@@ -72,7 +72,8 @@ resource "null_resource" "install_gitops_configuration" {
         -u ${var.git_repo} --branch ${var.git_branch} \
         --ssh-private-key ${var.ssh_priv_key_base64} \
         --kustomization name=infra path=./src/gitops/infra prune=true sync_interval=30s \
-        --kustomization name=apps path=./src/gitops/apps/ prune=true sync_interval=30s dependsOn=infra
+        --kustomization name=apps path=./src/gitops/apps/ prune=true sync_interval=30s dependsOn=infra \
+        --only-show-errors
     EOT
     environment = {
       SSH_PRIV_KEY_BASE64 = var.ssh_priv_key_base64
