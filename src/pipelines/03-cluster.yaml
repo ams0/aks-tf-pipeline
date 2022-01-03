@@ -10,6 +10,20 @@ trigger:
 
 name: $(Build.DefinitionName)-$(SourceBranchName)-${{ parameters.environment }}-${{ parameters.progressive }}
 
+parameters:
+  - name: progressive #override at pipeline run UI
+    displayName: Progressive Number
+    default: 001
+    type: number
+  - name: environment #override at pipeline run UI
+    displayName: Environment
+    default: dev
+    type: string
+    values:
+    - dev
+    - tst
+    - prd
+
 variables:
   - group: 'TF_LIBRARY'
   - name: stage
@@ -18,12 +32,10 @@ variables:
     value: "tfstates" # name of the resource group to create/use for the terraform state file
   - name: tf_state_sa_name
     value: "tfstateblobs" # name of of the storage account to create/use for the terraform state file
-  - name: environment
-    value: dev
   - name: IS_NOT_PR
     value: "${{ eq(lower(startsWith(variables['Build.SourceBranch'], 'refs/pull/')), 'false') }}"
   - name: EXTRA_OPTS
-    value: "-var-file=../vars/common.tfvars -var-file=../vars/${{ variables.environment }}.tfvars -var ssh_priv_key_base64=$(SSH_PRIV_KEY_BASE64)"
+    value: "-var-file=../vars/common.tfvars -var progressive=${{ parameters.progressive }} -var-file=../vars/${{ parameters.environment }}.tfvars"
 
 
 stages:
@@ -33,7 +45,7 @@ stages:
       WORKDIR: src/terraform/stages/${{ variables.stage }}
       tf_state_rg: ${{ variables.tf_state_rg }}
       tf_state_sa_name: ${{ variables.tf_state_sa_name }}
-      tf_state_key: ${{ variables.stage }}
+      tf_state_key: ${{ variables.stage }}-${{ parameters.environment }}-${{ parameters.progressive }}
       IS_NOT_PR: ${{ variables['IS_NOT_PR'] }}
       ARM_SERVICE_CONNECTION: $(ARM_SERVICE_CONNECTION)
       ARM_SERVICE_CONNECTION_NAME: $(ARM_SERVICE_CONNECTION_NAME)
