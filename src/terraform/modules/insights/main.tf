@@ -11,7 +11,6 @@ resource "azurerm_log_analytics_workspace" "logs" {
 }
 
 resource "azurerm_log_analytics_solution" "container" {
-  count                 = length(var.solutions)
   solution_name         = "ContainerInsights"
   location              = var.location
   resource_group_name   = var.resource_group_name
