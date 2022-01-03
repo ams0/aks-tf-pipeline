@@ -1,5 +1,5 @@
 resource "azurerm_container_registry" "acr" {
-  name                          = replace(format(var.resource_naming_template, 001, "cr"), "-", "")
+  name                          = replace(format(var.resource_naming_template, var.progressive, "cr"), "-", "")
   resource_group_name           = var.resource_group_name
   location                      = var.location
   sku                           = var.sku

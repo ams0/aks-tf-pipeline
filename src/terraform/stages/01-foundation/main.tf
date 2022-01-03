@@ -12,9 +12,11 @@ resource "azurerm_resource_group" "rg" {
 }
 
 module "network" {
-  source                   = "./../../modules/vnetsubnet"
-  resource_group_name      = azurerm_resource_group.rg.name
-  location                 = var.location
+  source              = "./../../modules/vnetsubnet"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = var.location
+  progressive         = var.progressive
+
   resource_naming_template = local.resource_naming_template
   environ                  = var.environment
   tags                     = var.tags

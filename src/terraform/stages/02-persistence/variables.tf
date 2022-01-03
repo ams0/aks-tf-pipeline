@@ -8,6 +8,11 @@ variable "environment" {
   default     = "dev"
 }
 
+variable "progressive" {
+  description = "progressive number"
+  type        = number
+  default     = "001"
+}
 variable "location" {
   description = "Azure location for the resources"
   default     = "westeurope"

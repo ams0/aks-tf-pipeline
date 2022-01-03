@@ -10,6 +10,11 @@ variable "resource_naming_template" {
   type = string
 }
 
+variable "progressive" {
+  description = "progressive number"
+  type        = number
+  default     = "001"
+}
 variable "upgrade_channel" {
   type    = string
   default = "stable"

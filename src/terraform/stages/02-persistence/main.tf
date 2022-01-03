@@ -7,11 +7,11 @@ locals {
 }
 
 data "azurerm_resource_group" "rg" {
-  name = "${format(local.resource_naming_template, 001, "tf")}-rg"
+  name = "${format(local.resource_naming_template, var.progressive, "tf")}-rg"
 }
 
 data "azurerm_virtual_network" "spoke" {
-  name                = "${format(local.resource_naming_template, 001, "spokes")}-vnet"
+  name                = "${format(local.resource_naming_template, var.progressive, "spokes")}-vnet"
   resource_group_name = data.azurerm_resource_group.rg.name
 }
 
@@ -22,9 +22,11 @@ data "azurerm_subnet" "cluster" {
 }
 
 module "acr" {
-  source                   = "./../../modules/acr"
-  resource_group_name      = data.azurerm_resource_group.rg.name
-  location                 = data.azurerm_resource_group.rg.location
+  source              = "./../../modules/acr"
+  resource_group_name = data.azurerm_resource_group.rg.name
+  location            = data.azurerm_resource_group.rg.location
+  progressive         = var.progressive
+
   resource_naming_template = local.resource_naming_template
   subnet_id                = data.azurerm_subnet.cluster.id
   private_vnet_id          = data.azurerm_virtual_network.spoke.id
@@ -40,9 +42,11 @@ module "keyvault" {
   #checkov:skip=CKV_AZURE_42:Ensure the key vault is recoverable
 
 
-  source                   = "./../../modules/keyvault"
-  resource_group_name      = data.azurerm_resource_group.rg.name
-  location                 = data.azurerm_resource_group.rg.location
+  source              = "./../../modules/keyvault"
+  resource_group_name = data.azurerm_resource_group.rg.name
+  location            = data.azurerm_resource_group.rg.location
+  progressive         = var.progressive
+
   resource_naming_template = local.resource_naming_template
   subnet_id                = data.azurerm_subnet.cluster.id
   private_vnet_id          = data.azurerm_virtual_network.spoke.id
@@ -50,9 +54,11 @@ module "keyvault" {
 }
 
 module "managedidentities" {
-  source                   = "./../../modules/managedidentities"
-  resource_group_name      = data.azurerm_resource_group.rg.name
-  location                 = data.azurerm_resource_group.rg.location
+  source              = "./../../modules/managedidentities"
+  resource_group_name = data.azurerm_resource_group.rg.name
+  location            = data.azurerm_resource_group.rg.location
+  progressive         = var.progressive
+
   resource_naming_template = local.resource_naming_template
 
   acr_name = module.acr.acr_name
@@ -66,9 +72,11 @@ module "managedidentities" {
 
 
 module "insights" {
-  source                   = "./../../modules/insights"
-  resource_group_name      = data.azurerm_resource_group.rg.name
-  location                 = data.azurerm_resource_group.rg.location
+  source              = "./../../modules/insights"
+  resource_group_name = data.azurerm_resource_group.rg.name
+  location            = data.azurerm_resource_group.rg.location
+  progressive         = var.progressive
+
   resource_naming_template = local.resource_naming_template
   tags                     = var.tags
   keyvault_id              = module.keyvault.keyvault_id

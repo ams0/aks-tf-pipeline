@@ -8,10 +8,10 @@ resource "azurerm_kubernetes_cluster" "aks" {
   #checkov:skip=CKV_AZURE_117:Ensure that AKS uses disk encryption set
   #checkov:skip=CKV_AZURE_115:Ensure that AKS enables private clusters
 
-  name                            = format(var.resource_naming_template, 001, "aks")
+  name                            = format(var.resource_naming_template, var.progressive, "aks")
   location                        = var.location
   resource_group_name             = var.resource_group_name
-  dns_prefix                      = format(var.resource_naming_template, 001, "aks")
+  dns_prefix                      = format(var.resource_naming_template, var.progressive, "aks")
   kubernetes_version              = var.kubernetes_version
   sku_tier                        = var.sku_tier
   api_server_authorized_ip_ranges = []

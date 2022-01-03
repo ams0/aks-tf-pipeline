@@ -7,21 +7,21 @@ locals {
 }
 
 data "azurerm_resource_group" "rg" {
-  name = "${format(local.resource_naming_template, 001, "tf")}-rg"
+  name = "${format(local.resource_naming_template, var.progressive, "tf")}-rg"
 }
 
 data "azurerm_user_assigned_identity" "aks" {
-  name                = "${format(local.resource_naming_template, 001, "aks")}-mi"
+  name                = "${format(local.resource_naming_template, var.progressive, "aks")}-mi"
   resource_group_name = data.azurerm_resource_group.rg.name
 }
 
 data "azurerm_user_assigned_identity" "aksnodepool" {
-  name                = "${format(local.resource_naming_template, 001, "aksnodepool")}-mi"
+  name                = "${format(local.resource_naming_template, var.progressive, "aksnodepool")}-mi"
   resource_group_name = data.azurerm_resource_group.rg.name
 }
 
 data "azurerm_virtual_network" "spoke" {
-  name                = "${format(local.resource_naming_template, 001, "spokes")}-vnet"
+  name                = "${format(local.resource_naming_template, var.progressive, "spokes")}-vnet"
   resource_group_name = data.azurerm_resource_group.rg.name
 }
 
@@ -35,6 +35,7 @@ module "aksgitops" {
   source              = "./../../modules/aksgitops"
   resource_group_name = data.azurerm_resource_group.rg.name
   location            = data.azurerm_resource_group.rg.location
+  progressive         = var.progressive
 
   resource_naming_template = local.resource_naming_template
 

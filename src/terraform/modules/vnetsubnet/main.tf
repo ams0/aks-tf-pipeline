@@ -1,5 +1,5 @@
 resource "azurerm_virtual_network" "hub" {
-  name                = "${format(var.resource_naming_template, 001, "hub")}-vnet"
+  name                = "${format(var.resource_naming_template, var.progressive, "hub")}-vnet"
   location            = var.location
   resource_group_name = var.resource_group_name
   address_space       = var.hub-space
@@ -25,7 +25,7 @@ resource "azurerm_subnet" "subnet-hub-private" {
 }
 
 resource "azurerm_virtual_network" "spoke" {
-  name                = "${format(var.resource_naming_template, 001, "spokes")}-vnet"
+  name                = "${format(var.resource_naming_template, var.progressive, "spokes")}-vnet"
   location            = var.location
   resource_group_name = var.resource_group_name
   address_space       = var.spoke-space
@@ -53,7 +53,7 @@ resource "azurerm_subnet" "subnet-spoke-ingress" {
 
 #Peering Spoke --> Hub
 resource "azurerm_virtual_network_peering" "spoke-hub" {
-  name                      = "${format(var.resource_naming_template, 001, "spoke-hub")}-peering"
+  name                      = "${format(var.resource_naming_template, var.progressive, "spoke-hub")}-peering"
   resource_group_name       = var.resource_group_name
   virtual_network_name      = azurerm_virtual_network.spoke.name
   remote_virtual_network_id = azurerm_virtual_network.hub.id
@@ -61,7 +61,7 @@ resource "azurerm_virtual_network_peering" "spoke-hub" {
 
 #Peering Spoke <-- Hub
 resource "azurerm_virtual_network_peering" "hub-spoke" {
-  name                      = "${format(var.resource_naming_template, 001, "hub-spoke")}-peering"
+  name                      = "${format(var.resource_naming_template, var.progressive, "hub-spoke")}-peering"
   resource_group_name       = var.resource_group_name
   virtual_network_name      = azurerm_virtual_network.hub.name
   remote_virtual_network_id = azurerm_virtual_network.spoke.id

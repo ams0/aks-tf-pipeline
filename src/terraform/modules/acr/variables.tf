@@ -6,6 +6,11 @@ variable "resource_group_name" {
   type = string
 }
 
+variable "progressive" {
+  description = "progressive number"
+  type        = number
+  default     = "001"
+}
 variable "sku" {
   type    = string
   default = "Premium"
