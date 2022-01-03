@@ -11,7 +11,7 @@ nodepools = [
     priority             = "Regular",
     "availability_zones" = ["1"],
     "eviction_policy"    = null,
-    vnet_subnet_id       = "/subscriptions/12c7e9d6-967e-40c8-8b3e-4659a4ada3ef/resourceGroups/westeurope-dev-1-aks-tf-rg/providers/Microsoft.Network/virtualNetworks/westeurope-dev-1-aks-spokes-vnet/subnets/subnet-spoke-cluster"
+    vnet_subnet_id       = "/subscriptions/12c7e9d6-967e-40c8-8b3e-4659a4ada3ef/resourceGroups/westeurope-dev-1-azdotf-tf-rg/providers/Microsoft.Network/virtualNetworks/westeurope-dev-1-azdotf-spokes-vnet/subnets/subnet-spoke-cluster"
     enable_auto_scaling  = true
     node_labels          = { type = "general_purpose", autoscaling = "on" },
     node_taints          = [],
