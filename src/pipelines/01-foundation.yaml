@@ -13,7 +13,7 @@ name: $(Build.DefinitionName)-$(SourceBranchName)-${{ parameters.environment }}-
 parameters:
   - name: comment #Just a comment
     displayName: Comment
-    default: "manualrun"
+    default: ""
     type: string
   - name: progressive #override at pipeline run UI
     displayName: Progressive Number
