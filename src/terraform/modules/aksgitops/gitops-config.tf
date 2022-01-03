@@ -60,20 +60,34 @@ resource "null_resource" "install_gitops_configuration" {
       if [ -n "$ARM_CLIENT_ID" ]; then
         # We are running on an Azure DevOps agent, need to log in
         az login --service-principal \
-                 --username "$ARM_CLIENT_ID" \
-                 --password "$ARM_CLIENT_SECRET" \
-                 --tenant "$ARM_TENANT_ID" \
-                 --output none
+            --username "$ARM_CLIENT_ID" \
+            --password "$ARM_CLIENT_SECRET" \
+            --tenant "$ARM_TENANT_ID" \
+            --output none
       fi
-      az k8s-configuration flux create -g ${var.resource_group_name} \
-        --cluster-name ${azurerm_kubernetes_cluster.aks.name} \
-        --name infra-apps-flux-config --cluster-type managedClusters \
-        --sync-interval 30s --ns cluster-config -s cluster \
-        -u ${var.git_repo} --branch ${var.git_branch} \
-        --ssh-private-key ${var.ssh_priv_key_base64} \
-        --kustomization name=infra path=./src/gitops/infra prune=true sync_interval=30s \
-        --kustomization name=apps path=./src/gitops/apps/ prune=true sync_interval=30s dependsOn=infra \
-        --only-show-errors
+      #Check if never run before, otherwise update the SSH key
+
+      CONF_EXIST=$(az k8s-configuration flux show --name infra-apps-flux-config --cluster-type managedClusters -g ${var.resource_group_name} --cluster-name ${azurerm_kubernetes_cluster.aks.name} --cluster-type managedClusters)
+      if [ $CONF_EXIST -eq 1 ]; then
+        az k8s-configuration flux create -g ${var.resource_group_name} \
+          --cluster-name ${azurerm_kubernetes_cluster.aks.name} \
+          --name infra-apps-flux-config --cluster-type managedClusters \
+          --sync-interval 30s --ns cluster-config -s cluster \
+          -u ${var.git_repo} --branch ${var.git_branch} \
+          --ssh-private-key ${var.ssh_priv_key_base64} \
+          --kustomization name=infra path=./src/gitops/infra prune=true sync_interval=30s \
+          --kustomization name=apps path=./src/gitops/apps/ prune=true sync_interval=30s dependsOn=infra \
+          --only-show-errors
+      else
+        az k8s-configuration flux update -g ${var.resource_group_name} \
+          --cluster-name ${azurerm_kubernetes_cluster.aks.name} \
+          --name infra-apps-flux-config --cluster-type managedClusters \
+          --sync-interval 30s --ns cluster-config -s cluster \
+          -u ${var.git_repo} --branch ${var.git_branch} \
+          --ssh-private-key ${var.ssh_priv_key_base64} \
+          --kustomization name=infra path=./src/gitops/infra prune=true sync_interval=30s \
+          --kustomization name=apps path=./src/gitops/apps/ prune=true sync_interval=30s dependsOn=infra \
+          --only-show-errors
     EOT
     environment = {
       SSH_PRIV_KEY_BASE64 = var.ssh_priv_key_base64
