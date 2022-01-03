@@ -8,6 +8,8 @@ trigger:
       - src/pipelines/01-foundation.yaml
       - src/terraform/stages/vars
 
+name: $(Build.DefinitionName)_$(SourceBranchName)_${{ parameters.progressive }}_${{ parameters.environment }}
+
 parameters:
   - name: progressive #override at pipeline run UI
     displayName: Progressive Number
