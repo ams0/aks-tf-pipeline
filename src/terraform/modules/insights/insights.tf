@@ -1,6 +1,6 @@
 
 resource "azurerm_log_analytics_workspace" "logs" {
-  name                = format(var.resource_naming_template, var.progressive, "log")
+  name                = format(var.resource_naming_template, var.progressive, "logs")
   location            = var.location
   resource_group_name = var.resource_group_name
   sku                 = "PerGB2018"

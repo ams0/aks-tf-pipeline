@@ -31,8 +31,8 @@ data "azurerm_subnet" "spokesubnet" {
   resource_group_name  = data.azurerm_resource_group.rg.name
 }
 
-data "azurerm_log_analytics_workspace" "appi" {
-  name                = format(local.resource_naming_template, var.progressive, "appi")
+data "azurerm_log_analytics_workspace" "logs" {
+  name                = format(local.resource_naming_template, var.progressive, "logs")
   resource_group_name = data.azurerm_resource_group.rg.name
 }
 module "aksgitops" {
@@ -69,7 +69,7 @@ module "aksgitops" {
 
   #monitoring
   addon_oms_agent_enabled    = true
-  log_analytics_workspace_id = data.azurerm_log_analytics_workspace.appi.id
+  log_analytics_workspace_id = data.azurerm_log_analytics_workspace.logs.id
 
   tags = var.tags
 }
