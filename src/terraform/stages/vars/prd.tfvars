@@ -1,3 +1,5 @@
+environment = "prd  "
+
 nodepools = [
   {
     name                 = "gp0",

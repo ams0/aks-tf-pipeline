@@ -1,3 +1,5 @@
+environment = "dev"
+
 nodepools = [
   {
     name                 = "gp0",
