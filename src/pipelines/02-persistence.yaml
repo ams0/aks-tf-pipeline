@@ -11,6 +11,8 @@ trigger:
       - src/pipelines/02-persistence.yaml
       - src/terraform/stages/vars
 
+name: $(Build.DefinitionName)-$(SourceBranchName)-${{ parameters.environment }}-${{ parameters.progressive }}
+
 parameters:
   - name: progressive #override at pipeline run UI
     displayName: Progressive Number

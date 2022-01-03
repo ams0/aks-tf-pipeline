@@ -8,6 +8,8 @@ trigger:
       - src/pipelines/03-cluster.yaml
       - src/terraform/stages/vars
 
+name: $(Build.DefinitionName)-$(SourceBranchName)-${{ parameters.environment }}-${{ parameters.progressive }}
+
 variables:
   - group: 'TF_LIBRARY'
   - name: stage
