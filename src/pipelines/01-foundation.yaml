@@ -8,7 +8,7 @@ trigger:
       - src/pipelines/01-foundation.yaml
       - src/terraform/stages/vars
 
-name: $(Build.DefinitionName)-$(SourceBranchName)-${{ parameters.environment }}-${{ parameters.progressive }}-${{ parameters.comment }
+name: $(Build.DefinitionName)-$(SourceBranchName)-${{ parameters.environment }}-${{ parameters.progressive }}-${{ parameters.comment }}
 
 parameters:
   - name: comment #Just a comment
