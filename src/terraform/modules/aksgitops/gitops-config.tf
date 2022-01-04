@@ -48,6 +48,7 @@ resource "null_resource" "install_gitops_configuration" {
 
   #This is to enforce execution at every run, to apply SSH key rotation
   triggers = {
+    id         = azurerm_kubernetes_cluster.aks.id
     always_run = "${timestamp()}"
   }
 
@@ -99,10 +100,6 @@ resource "null_resource" "install_gitops_configuration" {
     environment = {
       SSH_PRIV_KEY_BASE64 = var.ssh_priv_key_base64
     }
-  }
-
-  triggers = {
-    id = azurerm_kubernetes_cluster.aks.id
   }
 
   depends_on = [
