@@ -7,6 +7,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   #checkov:skip=CKV_AZURE_4:Ensure AKS logging to Azure Monitoring is Configured
   #checkov:skip=CKV_AZURE_117:Ensure that AKS uses disk encryption set
   #checkov:skip=CKV_AZURE_115:Ensure that AKS enables private clusters
+  #checkov:skip=CKV_AZURE_6:Ensure AKS has an API Server Authorized IP Ranges enabled
 
   name                            = format(var.resource_naming_template, var.progressive, "aks")
   location                        = var.location
