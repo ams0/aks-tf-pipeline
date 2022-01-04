@@ -74,9 +74,10 @@ resource "null_resource" "install_gitops_configuration" {
       fi
 
       #Check if never run before, otherwise update the SSH key
-      CONF_EXIST=$(az k8s-configuration flux show -o tabel --name infra-apps-flux-config --cluster-type managedClusters -g ${var.resource_group_name} --cluster-name ${azurerm_kubernetes_cluster.aks.name} --cluster-type managedClusters || true)
+      CONF_EXIST=$(az k8s-configuration flux show -o table --name infra-apps-flux-config --cluster-type managedClusters -g ${var.resource_group_name} --cluster-name ${azurerm_kubernetes_cluster.aks.name} --cluster-type managedClusters || true)
 
       if [ ! -z $CONF_EXIST ]; then 
+        echo "Creating a new GitOps config.." ;
         az k8s-configuration flux create -g ${var.resource_group_name} \
           --cluster-name ${azurerm_kubernetes_cluster.aks.name} \
           --name infra-apps-flux-config --cluster-type managedClusters \
@@ -87,6 +88,7 @@ resource "null_resource" "install_gitops_configuration" {
           --kustomization name=apps path=./src/gitops/apps/ prune=true sync_interval=30s dependsOn=infra \
           --only-show-errors
       else
+        echo "Updating existing GitOps config..";
         az k8s-configuration flux update -g ${var.resource_group_name} \
           --cluster-name ${azurerm_kubernetes_cluster.aks.name} \
           --name infra-apps-flux-config --cluster-type managedClusters \
