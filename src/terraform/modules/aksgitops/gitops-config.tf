@@ -88,6 +88,7 @@ resource "null_resource" "install_gitops_configuration" {
           --kustomization name=infra path=./src/gitops/infra prune=true sync_interval=30s \
           --kustomization name=apps path=./src/gitops/apps/ prune=true sync_interval=30s dependsOn=infra \
           --only-show-errors
+      fi
     EOT
     environment = {
       SSH_PRIV_KEY_BASE64 = var.ssh_priv_key_base64
