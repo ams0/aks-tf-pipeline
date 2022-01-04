@@ -46,6 +46,12 @@ resource "null_resource" "flux-system-exception" {
 
 resource "null_resource" "install_gitops_configuration" {
 
+  #This is to enforce execution at every run, to apply SSH key rotation
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+
+
   count = var.enable_gitops != false ? 1 : 0
 
   provisioner "local-exec" {
