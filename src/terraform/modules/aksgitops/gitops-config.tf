@@ -84,8 +84,8 @@ resource "null_resource" "install_gitops_configuration" {
           --sync-interval 30s --ns cluster-config -s cluster \
           -u ${var.git_repo} --branch ${var.git_branch} \
           --ssh-private-key ${var.ssh_priv_key_base64} \
-          --kustomization name=infra path=./src/gitops/infra prune=true sync_interval=30s \
-          --kustomization name=apps path=./src/gitops/apps/ prune=true sync_interval=30s dependsOn=infra \
+          --kustomization name=infra path=./src/gitops/environments/dev/infra/ prune=true sync_interval=30s \
+          --kustomization name=apps path=./src/gitops/environments/dev/apps/ prune=true sync_interval=30s dependsOn=infra \
           --only-show-errors
       else
         echo "Updating existing GitOps config..";
@@ -95,8 +95,8 @@ resource "null_resource" "install_gitops_configuration" {
           --sync-interval 30s \
           -u ${var.git_repo} --branch ${var.git_branch} \
           --ssh-private-key ${var.ssh_priv_key_base64} \
-          --kustomization name=infra path=./src/gitops/infra prune=true sync_interval=30s \
-          --kustomization name=apps path=./src/gitops/apps/ prune=true sync_interval=30s dependsOn=infra \
+          --kustomization name=infra path=./src/gitops/environments/dev/infra/ prune=true sync_interval=30s \
+          --kustomization name=apps path=./src/gitops/environments/dev/apps/ prune=true sync_interval=30s dependsOn=infra \
           --only-show-errors
       fi
     EOT
