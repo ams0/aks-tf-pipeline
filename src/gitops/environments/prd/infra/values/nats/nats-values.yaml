@@ -1,9 +1,10 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: helm-sample
+  name: nats
   namespace: cluster-config
 spec:
   values:
-    ingress:
-      dnsName: web.prd.internal.name.com
+    cluster:
+      enabled: true
+      replicas: 3
