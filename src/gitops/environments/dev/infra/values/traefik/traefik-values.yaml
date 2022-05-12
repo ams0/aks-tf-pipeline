@@ -7,4 +7,4 @@ spec:
   values:
     deployment:
       labels: 
-        environment: dev
+        environment: sytac
