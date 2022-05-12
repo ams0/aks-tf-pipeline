@@ -3,7 +3,6 @@ kind: HelmRelease
 metadata:
   name: keycloak
   namespace: cluster-config
-
 spec:
   releaseName: keycloak
   targetNamespace: keycloak
@@ -14,7 +13,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: keycloak
-        namespace: keycloak
+        namespace: cluster-config
   interval: 30s
   upgrade:
     force: true
