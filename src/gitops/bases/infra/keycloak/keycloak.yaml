@@ -3,7 +3,6 @@ kind: HelmRelease
 metadata:
   name: keycloak
   namespace: cluster-config
-
 spec:
   releaseName: keycloak
   targetNamespace: keycloak
