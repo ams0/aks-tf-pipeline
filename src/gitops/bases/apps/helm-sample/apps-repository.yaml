@@ -2,7 +2,7 @@ apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
   name: apps
-  namespace: apps
+  namespace: cluster-config
 spec:
   interval: 30m
   url:  https://github.com/LovelaceEngineering/gitops.git

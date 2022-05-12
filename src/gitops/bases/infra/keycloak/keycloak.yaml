@@ -13,7 +13,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: keycloak
-        namespace: keycloak
+        namespace: cluster-config
   interval: 30s
   upgrade:
     force: true
